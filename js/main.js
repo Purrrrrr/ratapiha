@@ -52,8 +52,11 @@ function start() {
           renderer.removeTrain(train)
           tt.train = null
         }
-      } else {
-        window.setTimeout(() => { tt.train = makeTrain(track)})
+      } else if (!tt.timeout) {
+        tt.timeout = window.setTimeout(() => { 
+          tt.train = makeTrain(track)
+          tt.timeout = null
+        }, rand(1,7)*1000)
       }
     }
 
