@@ -1,21 +1,31 @@
 import {positionOnTrack} from './track.js'
+import {orthogonalVector, makeVector} from './utils.js'
+
 
 export function makeRenderer(canvas) {
   window.cc = canvas
 
   function drawTrack(track) {
-    for (const {start, end} of track) {
-      const l = new fabric.Line(
+    for (const segment of track) {
+      const {start, end} = segment
+      const ov = orthogonalVector(segment, 2)
+
+      const trackProperties = {
+        stroke: 'gray',
+        strokeWidth: 1,
+        strokeLineCap: 'round',
+        selectable: false,
+      }
+      canvas.add(new fabric.Line(
         [
-          start.x, start.y, end.x, end.y
-        ], {
-          stroke: 'gray',
-          strokeWidth: 2,
-          strokeLineCap: 'round',
-          selectable: false,
-        }
-      )
-      canvas.add(l)
+          start.x - ov.x, start.y - ov.y, end.x - ov.x, end.y - ov.y
+        ], trackProperties
+      ))
+      canvas.add(new fabric.Line(
+        [
+          start.x + ov.x, start.y + ov.y, end.x + ov.x, end.y + ov.y
+        ], trackProperties
+      ))
     }
   }
 
@@ -63,11 +73,13 @@ export function makeRenderer(canvas) {
     const margin = obj.strokeWidth/2
     const start = positionOnTrack(track, pos + margin)
     const end = positionOnTrack(track, pos + cabin.length - margin)
+    const ov = orthogonalVector(makeVector(start, end), 2.5)
+
     obj.set({
-      x1: start.x,
-      x2: end.x,
-      y1: start.y,
-      y2: end.y,
+      x1: start.x + ov.x,
+      x2: end.x + ov.x,
+      y1: start.y + ov.y,
+      y2: end.y + ov.y,
     })
     obj.setCoords()
   }

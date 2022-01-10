@@ -1,13 +1,7 @@
-export function tracksegment(start, end) {
-  const dx = end.x - start.x
-  const dy = end.y - start.y
-  return {
-    start,
-    end,
-    dx, 
-    dy,
-    length: Math.sqrt(dx*dx+dy*dy)
-  }
+import {makeVector} from './utils.js'
+
+export function trackSegment(start, end) {
+  return makeVector(start, end)
 }
 
 export function makeTrack(firstPos, ...positions) {
@@ -18,7 +12,7 @@ export function makeTrack(firstPos, ...positions) {
   curPos = parsePos(firstPos)
   for (const p of positions) {
     nextPos = parsePos(p, curPos)
-    curSegment = tracksegment(curPos, nextPos)
+    curSegment = trackSegment(curPos, nextPos)
     if (prevSegment) {
       prevSegment.next = curSegment
       curSegment.previous = prevSegment 
@@ -51,6 +45,7 @@ export function positionOnTrack(track, pos) {
   return {
     x: start.x + dx * progress,
     y: start.y + dy * progress,
+    segment,
   }
 }
 
