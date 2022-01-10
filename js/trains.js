@@ -38,9 +38,11 @@ export const makeTrain = (track) => {
 
   return train
 }
+
 function makeCabin() {
   return {
     length: 30,
     color: randomBright(),
+    shape: Math.random() > 0.7 ? 'round' : 'square',
   }
 }

@@ -30,6 +30,7 @@ export function makeRenderer(canvas) {
         ], {
           stroke: cabin.color,
           strokeWidth: 6,
+          strokeLineCap: cabin.shape,
           selectable: false,
           shadow: new fabric.Shadow({
             color: 'black',
@@ -58,9 +59,10 @@ export function makeRenderer(canvas) {
   }
 
   function drawCabin(track, cabin, pos) {
-    const start = positionOnTrack(track, pos)
-    const end = positionOnTrack(track, pos + cabin.length)
     const obj = getCabinObject(cabin)
+    const margin = obj.strokeWidth/2
+    const start = positionOnTrack(track, pos + margin)
+    const end = positionOnTrack(track, pos + cabin.length - margin)
     obj.set({
       x1: start.x,
       x2: end.x,
