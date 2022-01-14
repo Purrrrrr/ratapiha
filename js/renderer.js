@@ -1,5 +1,6 @@
 import {positionOnTrack} from './track.js'
 import {orthogonalVector, makeVector} from './utils.js'
+import {CANVAS_HEIGHT, CANVAS_WIDTH} from './canvas.js'
 
 
 export function makeRenderer(canvas) {
@@ -27,6 +28,7 @@ export function makeRenderer(canvas) {
         ], trackProperties
       ))
     }
+    messageObj.bringToFront()
   }
 
   const cabinObjects = new WeakMap()
@@ -52,6 +54,7 @@ export function makeRenderer(canvas) {
       )
       cabinObjects.set(cabin, c)
       canvas.add(c)
+      messageObj.bringToFront()
       return c
     }
   }
@@ -87,10 +90,30 @@ export function makeRenderer(canvas) {
   function removeTrain(train) {
     train.cabins.forEach(cabin => canvas.remove(cabinObjects.get(cabin)))
   }
+  
+  const messageObj = new fabric.Text('', { 
+    top: 0,
+    left: 0,
+    fill: 'yellow',
+    shadow: 'rgba(0,0,0,0.5) 1px 1px 0px',
+    selectable: false,
+  });
+  canvas.add(messageObj);
+
+  function setMessage(msg) {
+    if (msg.text === msg) return
+
+    messageObj.set({
+      text: msg,
+    })
+      .viewportCenter()
+      .setCoords()
+  }
 
   return {
     drawTrack,
     drawTrain,
     removeTrain,
+    setMessage,
   }
 }

@@ -2,7 +2,7 @@ import {trackLength} from './track.js'
 
 const rand = (min, max) => Math.random()*(max-min) + min
 const randomBright = () => `hsl(${rand(0, 360)}, ${rand(30, 100)}%, ${rand(20, 70)}%)`
-const spaceBetweenCabins = 2
+const spaceBetweenCabins = 1
 
 export const makeTrain = (track) => {
   const cabins = []

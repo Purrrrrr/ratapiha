@@ -42,6 +42,8 @@ function start() {
     renderer.drawTrack(track.track)
   )
 
+  let running = true
+
   function draw() {
     for(const tt of tracks) {
       const { track, train } =  tt
@@ -60,8 +62,23 @@ function start() {
       }
     }
 
-    window.requestAnimationFrame(draw)
+
+    if (running) {
+      renderer.setMessage('')
+      window.requestAnimationFrame(draw)
+    } else {
+      renderer.setMessage('Paused')
+    }
   }
+
+  window.addEventListener('keyup', (e) => {
+    console.log(e.code)
+    switch(e.code) {
+      case 'Space':
+        running = !running
+        if (running) draw()
+    }
+  })
 
   window.requestAnimationFrame(draw)
 }
